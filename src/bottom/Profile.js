@@ -145,7 +145,7 @@ const Profile = () => {
             ]}>
             <Text style={[CStyles.fs5, CStyles.textWhite]}>Speed Limit</Text>
             <Text style={[CStyles.fs2, CStyles.textWhite, CStyles.textBold]}>
-              60km
+              15m/s
             </Text>
           </View>
           <View
@@ -160,17 +160,17 @@ const Profile = () => {
             ]}>
             <Text style={[CStyles.fs5, CStyles.textWhite]}>Distance Limit</Text>
             <Text style={[CStyles.fs2, CStyles.textWhite, CStyles.textBold]}>
-              700m
+              1km
             </Text>
           </View>
         </View>
-        <View style={[CStyles.flexRow, CStyles.alignItemsCenter]}>
+        <View style={[CStyles.flexRow, CStyles.alignItemsCenter, CStyles.mb1]}>
           <Icon name="location-on" color={CStyles.AppColorDark} size={40} />
           <View>
-            <Text style={[CStyles.fs5, CStyles.textBlack]}>Home Location </Text>
-            <Text style={[CStyles.fs5, CStyles.textBlack, CStyles.textBold]}>
+            <Text style={[CStyles.fs5, CStyles.textBlack, CStyles.textBold]}>Home Location </Text>
+            {/* <Text style={[CStyles.fs5, CStyles.textBlack, CStyles.textBold]}>
               North Nazimabad, block 02
-            </Text>
+            </Text> */}
           </View>
         </View>
         {/* <View style={[CStyles.w100, CStyles.h50]}> */}

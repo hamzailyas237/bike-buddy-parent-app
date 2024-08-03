@@ -35,13 +35,22 @@ const OnBoarding = () => {
     getData()
   }, []);
 
+  
   const handleDataChange = (key, value) => {
-    setData({
-      ...data,
-      [key]: value,
-    });
+    if (key == "numberPlate") {
+      setData({
+        ...data,
+        [key]: value.toUpperCase(),
+      });
+    } else {
+      setData({
+        ...data,
+        [key]: value,
+      });
+    }
   };
 
+  console.log(data)
   const saveData = async () => {
     try {
       const response = await axios.post(`${API_BASE_URL}/user`, data);

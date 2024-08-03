@@ -72,7 +72,7 @@ const BottomNavigator = ({ navigation }) => {
         >
             <Bottom.Screen name="Home" component={Home} />
             <Bottom.Screen name="Map" component={Map} />
-            <Bottom.Screen name="Statistic" component={Statistic} />
+            {/* <Bottom.Screen name="Statistic" component={Statistic} /> */}
             <Bottom.Screen name="Profile" component={Profile} options={{
                 headerTitleStyle: {
                     color: "white"

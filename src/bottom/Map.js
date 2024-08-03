@@ -53,7 +53,7 @@ const Map = ({navigation}) => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => navigation.navigate('Outofrange')}
             style={[
               CStyles.positionAbsolute,
@@ -72,7 +72,7 @@ const Map = ({navigation}) => {
                 North Nazimabad, block 02
               </Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <MapView
             style={styles.map}
             initialRegion={{

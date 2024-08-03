@@ -24,6 +24,7 @@ const Home = ({navigation}) => {
     lastDistance: null,
   });
   const [averageSpeed, setAverageSpeed] = useState();
+  const [speedLimitBreached, setSpeedLimitBreached] = useState();
 
   useEffect(() => {
     const getData = async () => {
@@ -70,6 +71,10 @@ const Home = ({navigation}) => {
     return avgSpeed;
   };
 
+  function filterSpeeds(speeds) {
+    return speeds.filter(speed => speed > 15);
+  }
+
   const getUserData = async () => {
     try {
       const value = await AsyncStorage.getItem('plate-no');
@@ -77,6 +82,8 @@ const Home = ({navigation}) => {
       const data = response?.data?.user;
       const avgSpeed = calculateAverageSpeed(data?.speed);
       setAverageSpeed(avgSpeed);
+      const filteredSpeeds = filterSpeeds(data?.speed)      
+      setSpeedLimitBreached(filteredSpeeds)
       setRiderLocation({
         latitude: parseFloat(data?.riderLatitude),
         longitude: parseFloat(data?.riderLongitude),
@@ -181,14 +188,14 @@ const Home = ({navigation}) => {
                   CStyles.alignItemsCenter,
                 ]}>
                 {/* <Icon name="schedule" size={30} color={CStyles._white} /> */}
-                <Icon name="location-on" size={30} color={CStyles._white} />
+                <Icon name="speed" size={30} color={CStyles._white} />
                 <View style={[CStyles.mx1]}>
                   <Text style={[CStyles.fs6, CStyles.textWhite]}>
-                    Avg Distance
+                    Speed Limit Breached
                   </Text>
                   <Text
                     style={[CStyles.fs5, CStyles.textWhite, CStyles.textBold]}>
-                    {Math.max(...riderLocation?.distance).toFixed()}m
+                    {speedLimitBreached?.length || 0} Times
                   </Text>
                 </View>
               </TouchableOpacity>
