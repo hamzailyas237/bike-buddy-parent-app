@@ -1,6 +1,6 @@
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
-import MapView, {Marker} from 'react-native-maps';
+import MapView, {Marker, Polyline} from 'react-native-maps';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import CStyles from '../style';
 import axios from 'axios';
@@ -17,12 +17,20 @@ const Map = ({navigation}) => {
     lastSpeed: null,
     lastDistance: null,
   });
+  const [homeLocation, setHomeLocation] = useState({
+    latitude: null,
+    longitude: null,
+  });
 
   const getUserData = async () => {
     try {
       const value = await AsyncStorage.getItem('plate-no');
       const response = await axios.get(`${API_BASE_URL}/user/${value}`);
       const data = response?.data?.user;
+      setHomeLocation({
+        latitude: parseFloat(response?.data?.user.latitude),
+        longitude: parseFloat(response?.data?.user.longitude),
+      });
       setRiderLocation({
         latitude: parseFloat(data?.riderLatitude),
         longitude: parseFloat(data?.riderLongitude),
@@ -53,8 +61,8 @@ const Map = ({navigation}) => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          {/* <TouchableOpacity
-            onPress={() => navigation.navigate('Outofrange')}
+          <TouchableOpacity
+            // onPress={() => navigation.navigate('Outofrange')}
             style={[
               CStyles.positionAbsolute,
               CStyles.flexRow,
@@ -67,13 +75,42 @@ const Map = ({navigation}) => {
             ]}>
             <Icon name="location-on" size={30} color={CStyles._white} />
             <View style={[CStyles.mx1]}>
-              <Text style={[CStyles.fs5, CStyles.textWhite]}>70m</Text>
-              <Text style={[CStyles.fs5, CStyles.textWhite, CStyles.textBold]}>
+              <Text style={[CStyles.fs5, CStyles.textWhite]}>{riderLocation?.lastDistance}m</Text>
+              {/* <Text style={[CStyles.fs5, CStyles.textWhite, CStyles.textBold]}>
                 North Nazimabad, block 02
-              </Text>
+              </Text> */}
             </View>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
           <MapView
+            style={styles.map}
+            region={{
+              latitude: riderLocation.latitude,
+              longitude: riderLocation.longitude,
+              latitudeDelta: 0.092,
+              longitudeDelta: 0.121,
+            }}>
+            <Marker
+              coordinate={{
+                latitude: riderLocation.latitude,
+                longitude: riderLocation.longitude,
+              }}>
+              <Icon name="two-wheeler" size={40} color="black" />
+            </Marker>
+
+            <Marker
+              coordinate={{
+                latitude: homeLocation.latitude,
+                longitude: homeLocation.longitude,
+              }}>
+              <Icon name="home" size={40} color="black" />
+            </Marker>
+            <Polyline
+              coordinates={[homeLocation, riderLocation]}
+              strokeWidth={6}
+              strokeColor="blue"
+            />
+          </MapView>
+          {/* <MapView
             style={styles.map}
             initialRegion={{
               latitude: riderLocation?.latitude,
@@ -88,7 +125,7 @@ const Map = ({navigation}) => {
               }}
               title={'bike'}
             />
-          </MapView>
+          </MapView> */}
         </View>
       )}
     </>

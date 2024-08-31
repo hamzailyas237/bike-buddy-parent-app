@@ -24,6 +24,7 @@ const Home = ({navigation}) => {
     lastDistance: null,
   });
   const [averageSpeed, setAverageSpeed] = useState();
+  const [maxSpeed, setMaxSpeed] = useState();
   const [speedLimitBreached, setSpeedLimitBreached] = useState();
 
   useEffect(() => {
@@ -68,7 +69,9 @@ const Home = ({navigation}) => {
       0,
     );
     const avgSpeed = totalSpeed / speedArray.length;
-    return avgSpeed;
+    // Convert average speed from m/s to km/h
+    const avgSpeedKmph = avgSpeed * 3.6;
+    return avgSpeedKmph;
   };
 
   function filterSpeeds(speeds) {
@@ -80,10 +83,14 @@ const Home = ({navigation}) => {
       const value = await AsyncStorage.getItem('plate-no');
       const response = await axios.get(`${API_BASE_URL}/user/${value}`);
       const data = response?.data?.user;
+      // console.log('data',data)
       const avgSpeed = calculateAverageSpeed(data?.speed);
       setAverageSpeed(avgSpeed);
-      const filteredSpeeds = filterSpeeds(data?.speed)      
-      setSpeedLimitBreached(filteredSpeeds)
+      const filteredSpeeds = filterSpeeds(data?.speed);
+      setSpeedLimitBreached(filteredSpeeds);
+      const maxSpeedInKm = Math.max(...riderLocation?.speed)?.toFixed() * 3.6
+      const roundedSpeed = Math.round(maxSpeedInKm)
+      setMaxSpeed(roundedSpeed);
       setRiderLocation({
         latitude: parseFloat(data?.riderLatitude),
         longitude: parseFloat(data?.riderLongitude),
@@ -134,7 +141,7 @@ const Home = ({navigation}) => {
                 CStyles.my1,
               ]}>
               <TouchableOpacity
-                onPress={() => navigation.navigate('Outofrange')}
+                // onPress={() => navigation.navigate('Outofrange')}
                 style={[
                   CStyles.flexRow,
                   CStyles.w45,
@@ -145,17 +152,15 @@ const Home = ({navigation}) => {
                 ]}>
                 <Icon name="location-on" size={30} color={CStyles._white} />
                 <View style={[CStyles.mx1]}>
-                  <Text style={[CStyles.fs6, CStyles.textWhite]}>
-                    Last Distance
-                  </Text>
+                  <Text style={[CStyles.fs6, CStyles.textWhite]}>Distance</Text>
                   <Text
                     style={[CStyles.fs5, CStyles.textWhite, CStyles.textBold]}>
-                    {riderLocation?.lastDistance}m
+                    {riderLocation?.lastDistance}m 
                   </Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => navigation.navigate('Outofrange')}
+                // onPress={() => navigation.navigate('Outofrange')}
                 style={[
                   CStyles.flexRow,
                   CStyles.w45,
@@ -171,14 +176,14 @@ const Home = ({navigation}) => {
                   </Text>
                   <Text
                     style={[CStyles.fs5, CStyles.textWhite, CStyles.textBold]}>
-                    {Math.max(...riderLocation?.speed).toFixed()}m/s
+                    {maxSpeed} km/h
                   </Text>
                 </View>
               </TouchableOpacity>
             </View>
             <View style={[CStyles.flexRow, CStyles.justifyContentAround]}>
               <TouchableOpacity
-                onPress={() => navigation.navigate('Outofrange')}
+                // onPress={() => navigation.navigate('Outofrange')}
                 style={[
                   CStyles.flexRow,
                   CStyles.w45,
@@ -200,7 +205,7 @@ const Home = ({navigation}) => {
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => navigation.navigate('Outofrange')}
+                // onPress={() => navigation.navigate('Outofrange')}
                 style={[
                   CStyles.flexRow,
                   CStyles.w45,
@@ -216,7 +221,7 @@ const Home = ({navigation}) => {
                   </Text>
                   <Text
                     style={[CStyles.fs5, CStyles.textWhite, CStyles.textBold]}>
-                    {averageSpeed?.toFixed()}m/s
+                    {averageSpeed?.toFixed()} km/h
                   </Text>
                 </View>
               </TouchableOpacity>
